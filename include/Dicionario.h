@@ -1,0 +1,4 @@
+#ifndef TP2_DICIONARIO_H
+#define TP2_DICIONARIO_H
+
+#endif //TP2_DICIONARIO_H
