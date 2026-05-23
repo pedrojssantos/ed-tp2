@@ -7,11 +7,11 @@
 
 Dicionario::Dicionario() : _numUsr(1), _numTm(1)
 {
-    _usuarios = new Usuario*[_numUsr];
-    _temas = new Tema*[_numTm];
-    _nosUsrSc = new No*[_numUsr];
-    _nosUsrTm = new No*[_numUsr];
-    _nosTm = new No*[_numTm];
+    _usuarios = new Usuario*[_numUsr]();
+    _temas = new Tema*[_numTm]();
+    _nosUsrSc = new No*[_numUsr]();
+    _nosUsrTm = new No*[_numUsr]();
+    _nosTm = new No*[_numTm]();
 }
 
 Dicionario::~Dicionario()
@@ -82,7 +82,7 @@ void Dicionario::registrarTm(int id, std::string& nome, std::string& tipo, No* n
 {
     if (id==_numTm)
     {
-        Tema** temp1 = new Tema*[_numUsr*2];
+        Tema** temp1 = new Tema*[_numTm*2];
         No** temp2 = new No*[_numTm*2];
 
         for (int i=0; i<_numTm*2; ++i)
@@ -111,35 +111,35 @@ void Dicionario::registrarTm(int id, std::string& nome, std::string& tipo, No* n
     _nosTm[id] = no;
 }
 
-const Usuario* Dicionario::buscarUsr(int id) const
+Usuario* Dicionario::buscarUsr(int id) const
 {
     if (_usuarios[id]) return _usuarios[id];
 
     return nullptr;
 }
 
-const Tema* Dicionario::buscarTm(int id) const
+Tema* Dicionario::buscarTm(int id) const
 {
     if (_temas[id]) return _temas[id];
 
     return nullptr;
 }
 
-const No* Dicionario::buscarNoUsrSc(int id) const
+No* Dicionario::buscarNoUsrSc(int id) const
 {
     if (_nosUsrSc[id]) return _nosUsrSc[id];
 
     return nullptr;
 }
 
-const No* Dicionario::buscarNoUsrTm(int id) const
+No* Dicionario::buscarNoUsrTm(int id) const
 {
     if (_nosUsrTm[id]) return _nosUsrTm[id];
 
     return nullptr;
 }
 
-const No* Dicionario::buscarNoTm(int id) const
+No* Dicionario::buscarNoTm(int id) const
 {
     if (_nosTm[id]) return _nosTm[id];
 

@@ -22,11 +22,11 @@ public:
     ~Dicionario();
     void registrarUsr(int id, std::string& nome, int idade, No* noUsrSc, No* noUsrTm);
     void registrarTm(int id, std::string& nome, std::string& tipo, No* no);
-    const Usuario* buscarUsr(int id) const;
-    const Tema* buscarTm(int id) const;
-    const No* buscarNoUsrSc(int id) const;
-    const No* buscarNoUsrTm(int id) const;
-    const No* buscarNoTm(int id) const;
+    Usuario* buscarUsr(int id) const;
+    Tema* buscarTm(int id) const;
+    No* buscarNoUsrSc(int id) const;
+    No* buscarNoUsrTm(int id) const;
+    No* buscarNoTm(int id) const;
 };
 
 #endif //TP2_DICIONARIO_H
