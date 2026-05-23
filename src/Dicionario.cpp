@@ -3,14 +3,15 @@
 #include "Dicionario.h"
 #include "Usuario.h"
 #include "Tema.h"
-#include "NoGrafo.h"
+#include "No.h"
 
 Dicionario::Dicionario() : _numUsr(1), _numTm(1)
 {
     _usuarios = new Usuario*[_numUsr];
     _temas = new Tema*[_numTm];
-    _nosUsr = new NoGrafo*[_numUsr];
-    _nosTm = new NoGrafo*[_numTm];
+    _nosUsrSc = new No*[_numUsr];
+    _nosUsrTm = new No*[_numUsr];
+    _nosTm = new No*[_numTm];
 }
 
 Dicionario::~Dicionario()
@@ -18,67 +19,71 @@ Dicionario::~Dicionario()
     for (int i=0; i<_numUsr; ++i)
     {
         Usuario* usr = _usuarios[i];
-        NoGrafo* noUsr = _nosUsr[i];
 
         if (usr) delete usr;
-        if (noUsr) delete noUsr;
     }
 
     delete[] _usuarios;
-    delete[] _nosUsr;
+    delete[] _nosUsrSc;
+    delete[] _nosUsrTm;
 
     for (int i=0; i<_numTm; ++i)
     {
         Tema* tm = _temas[i];
-        NoGrafo* noTm = _nosTm[i];
 
         if (tm) delete tm;
-        if (noTm) delete noTm;
     }
 
     delete[] _temas;
     delete[] _nosTm;
 }
 
-void Dicionario::registrarUsr(int id, std::string& nome, int idade, NoGrafo* no)
+void Dicionario::registrarUsr(int id, std::string& nome, int idade, No* noUsrSc, No* noUsrTm)
 {
     if (id==_numUsr)
     {
         Usuario** temp1 = new Usuario*[_numUsr*2];
-        NoGrafo** temp2 = new NoGrafo*[_numUsr*2];
+        No** temp2 = new No*[_numUsr*2];
+        No** temp3 = new No*[_numUsr*2];
 
         for (int i=0; i<_numUsr*2; ++i)
         {
             if (i<_numUsr)
             {
                 temp1[i] = _usuarios[i];
-                temp2[i] = _nosUsr[i];
+                temp2[i] = _nosUsrSc[i];
+                temp3[i] = _nosUsrTm[i];
             }
             else
             {
                 temp1[i] = nullptr;
                 temp2[i] = nullptr;
+                temp3[i] = nullptr;
             }
         }
 
         delete[] _usuarios;
-        delete[] _nosUsr;
+        delete[] _nosUsrSc;
+        delete[] _nosUsrTm;
 
         _usuarios = temp1;
-        _nosUsr = temp2;
+        _nosUsrSc = temp2;
+        _nosUsrTm = temp3;
+
         _numUsr*=2;
     }
 
     _usuarios[id] = new Usuario(id, nome, idade);
-    _nosUsr[id] = no;
+    _nosUsrSc[id] = noUsrSc;
+    _nosUsrTm[id] = noUsrTm;
 }
 
-void Dicionario::registrarTm(int id, std::string& nome, std::string& tipo, NoGrafo* no)
+void Dicionario::registrarTm(int id, std::string& nome, std::string& tipo, No* no)
 {
     if (id==_numTm)
     {
         Tema** temp1 = new Tema*[_numUsr*2];
-        NoGrafo** temp2 = new NoGrafo*[_numTm*2];
+        No** temp2 = new No*[_numTm*2];
 
         for (int i=0; i<_numTm*2; ++i)
         {
@@ -120,14 +125,21 @@ const Tema* Dicionario::buscarTm(int id) const
     return nullptr;
 }
 
-const NoGrafo* Dicionario::buscarNoUsr(int id) const
+const No* Dicionario::buscarNoUsrSc(int id) const
 {
-    if (_nosUsr[id]) return _nosUsr[id];
+    if (_nosUsrSc[id]) return _nosUsrSc[id];
 
     return nullptr;
 }
 
-const NoGrafo* Dicionario::buscarNoTm(int id) const
+const No* Dicionario::buscarNoUsrTm(int id) const
+{
+    if (_nosUsrTm[id]) return _nosUsrTm[id];
+
+    return nullptr;
+}
+
+const No* Dicionario::buscarNoTm(int id) const
 {
     if (_nosTm[id]) return _nosTm[id];
 
