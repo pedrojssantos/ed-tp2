@@ -5,6 +5,7 @@
 #include "Tema.h"
 #include "No.h"
 
+// Inicializa os vetores de mapeamento com capacidade inicial 1
 Dicionario::Dicionario() : _numUsr(1), _numTm(1)
 {
     _usuarios = new Usuario*[_numUsr]();
@@ -14,12 +15,12 @@ Dicionario::Dicionario() : _numUsr(1), _numTm(1)
     _nosTm = new No*[_numTm]();
 }
 
+// Libera a memória alocada para os objetos e depois os vetores
 Dicionario::~Dicionario()
 {
     for (int i=0; i<_numUsr; ++i)
     {
         Usuario* usr = _usuarios[i];
-
         if (usr) delete usr;
     }
 
@@ -30,7 +31,6 @@ Dicionario::~Dicionario()
     for (int i=0; i<_numTm; ++i)
     {
         Tema* tm = _temas[i];
-
         if (tm) delete tm;
     }
 
@@ -38,14 +38,17 @@ Dicionario::~Dicionario()
     delete[] _nosTm;
 }
 
+// Registra um usuário, dobrando o tamanho dos vetores caso atinja o limite
 void Dicionario::registrarUsr(int id, std::string& nome, int idade, No* noUsrSc, No* noUsrTm)
 {
+    // Verifica se precisa redimensionar (capacidade máxima atingida)
     if (id==_numUsr)
     {
         Usuario** temp1 = new Usuario*[_numUsr*2];
         No** temp2 = new No*[_numUsr*2];
         No** temp3 = new No*[_numUsr*2];
 
+        // Copia os dados antigos para os novos vetores maiores
         for (int i=0; i<_numUsr*2; ++i)
         {
             if (i<_numUsr)
@@ -78,13 +81,16 @@ void Dicionario::registrarUsr(int id, std::string& nome, int idade, No* noUsrSc,
     _nosUsrTm[id] = noUsrTm;
 }
 
+// Registra um tema, dobrando o tamanho dos vetores caso atinja o limite
 void Dicionario::registrarTm(int id, std::string& nome, std::string& tipo, No* no)
 {
+    // Verifica se precisa redimensionar (capacidade máxima atingida)
     if (id==_numTm)
     {
         Tema** temp1 = new Tema*[_numTm*2];
         No** temp2 = new No*[_numTm*2];
 
+        // Copia os dados antigos para os novos vetores maiores
         for (int i=0; i<_numTm*2; ++i)
         {
             if (i<_numTm)
@@ -114,34 +120,29 @@ void Dicionario::registrarTm(int id, std::string& nome, std::string& tipo, No* n
 Usuario* Dicionario::buscarUsr(int id) const
 {
     if (_usuarios[id]) return _usuarios[id];
-
     return nullptr;
 }
 
 Tema* Dicionario::buscarTm(int id) const
 {
     if (_temas[id]) return _temas[id];
-
     return nullptr;
 }
 
 No* Dicionario::buscarNoUsrSc(int id) const
 {
     if (_nosUsrSc[id]) return _nosUsrSc[id];
-
     return nullptr;
 }
 
 No* Dicionario::buscarNoUsrTm(int id) const
 {
     if (_nosUsrTm[id]) return _nosUsrTm[id];
-
     return nullptr;
 }
 
 No* Dicionario::buscarNoTm(int id) const
 {
     if (_nosTm[id]) return _nosTm[id];
-
     return nullptr;
 }

@@ -3,6 +3,7 @@
 #include "Grafo.h"
 #include "No.h"
 
+// Inicializa a estrutura base. Só aloca a matriz se o modo inicial for "M"
 Grafo::Grafo(bool direcionado, std::string& modo) :
     _direcionado(direcionado), _numVertices(1), _numArestas(0), _idxAtual(0), _modo(modo)
 {
@@ -22,10 +23,12 @@ Grafo::Grafo(bool direcionado, std::string& modo) :
     }
 }
 
+// Limpa a memória baseada no modo atual para evitar vazamentos
 Grafo::~Grafo()
 {
     if (_modo=="L")
     {
+        // Deleta as arestas em cada posicao do vetor
         for (int i=0; i<_numVertices; ++i)
         {
             No* aux = nullptr;
@@ -58,6 +61,7 @@ Grafo::~Grafo()
     _matrizAdj = nullptr;
 }
 
+// Cria uma aresta direcionada (no1 -> no2)
 void Grafo::criarAresta(No *no1, No *no2)
 {
     if (!no1 || !no2) return;
@@ -88,6 +92,7 @@ void Grafo::criarAresta(No *no1, No *no2)
     }
 }
 
+// Remove uma aresta direcionada (no1 -> no2)
 void Grafo::removerAresta(No* no1, No* no2)
 {
     if (!no1 || !no2) return;
@@ -108,7 +113,6 @@ void Grafo::removerAresta(No* no1, No* no2)
         if (noAtual)
         {
             aux->_prox = noAtual->_prox;
-
             delete noAtual;
         }
     }
@@ -121,6 +125,7 @@ void Grafo::removerAresta(No* no1, No* no2)
     }
 }
 
+// Faz a transição estrutural entre a Lista e a Matriz
 void Grafo::mudarModo(std::string& modo)
 {
     if (_modo==modo) return;
@@ -136,6 +141,8 @@ void Grafo::mudarModo(std::string& modo)
             _matrizAdj[i] = new int[_numVertices]();
         }
 
+        // Percorre as listas encadeadas,
+        // transcreve os dados na matriz e remove as arestas em cada posicao do vetor
         for (int i=0; i<_numVertices; ++i)
         {
             if (!_listaAdj[i]) continue;
@@ -158,6 +165,7 @@ void Grafo::mudarModo(std::string& modo)
     }
     else
     {
+        // Varre a matriz procurando arestas (1s) e constrói as listas
         for (int i=0; i<_numVertices; ++i)
         {
             for (int j=0; j<_numVertices; ++j)
@@ -184,9 +192,11 @@ int Grafo::getNumVertices() const
     return _numVertices;
 }
 
+// Registra um novo vértice no grafo. Realoca se o limite for atingido
 No* Grafo::adicionarVertice(int id, int tipo) {
     if (_idxAtual==_numVertices)
     {
+        // Só redimensiona a matriz se ela estiver ativa
         if (_matrizAdj)
         {
             int** temp1 = new int*[_numVertices*2]();
@@ -210,6 +220,7 @@ No* Grafo::adicionarVertice(int id, int tipo) {
             _matrizAdj = temp1;
         }
 
+        // A lista de vértices principais é sempre redimensionada
         No** temp2 = new No*[_numVertices*2];
 
         for (int i=0; i<_numVertices*2; ++i)
@@ -227,7 +238,6 @@ No* Grafo::adicionarVertice(int id, int tipo) {
         delete[] _listaAdj;
 
         _listaAdj = temp2;
-
         _numVertices*=2;
     }
 
@@ -255,6 +265,7 @@ void Grafo::desrelacionar(No* no1, No* no2)
     if (!_direcionado) removerAresta(no2, no1);
 }
 
+// Retorna as arestas de saída (quem o vértice aponta)
 int Grafo::buscarSucessores(No* no, int* suc)
 {
     int cont=0;
@@ -266,13 +277,13 @@ int Grafo::buscarSucessores(No* no, int* suc)
         while (noAtual)
         {
             suc[cont] = noAtual->_id;
-
             ++cont;
             noAtual = noAtual->_prox;
         }
     }
     else
     {
+        // Trava a linha e varre as colunas da matriz
         for (int j=0; j<_numVertices; ++j)
         {
             if (_matrizAdj[no->_pos][j])
@@ -286,6 +297,7 @@ int Grafo::buscarSucessores(No* no, int* suc)
     return cont;
 }
 
+// Retorna as arestas de entrada (quem aponta para o vértice)
 int Grafo::buscarAntecessores(No* no, int* suc)
 {
     int cont=0;
@@ -295,7 +307,6 @@ int Grafo::buscarAntecessores(No* no, int* suc)
         for (int i=0; i<_numVertices; ++i)
         {
             No* aux = _listaAdj[i];
-
             if (!aux) continue;
 
             No* noAtual = aux->_prox;
@@ -315,6 +326,7 @@ int Grafo::buscarAntecessores(No* no, int* suc)
     }
     else
     {
+        // Trava a coluna e varre as linhas da matriz
         for (int i=0; i<_numVertices; ++i)
         {
             if (_matrizAdj[i][no->_pos])
