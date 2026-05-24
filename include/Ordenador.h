@@ -1,8 +1,6 @@
 #ifndef TP2_ORDENADOR_H
 #define TP2_ORDENADOR_H
 
-#include "No.h"
-
 class Ordenador
 {
 private:
