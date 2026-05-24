@@ -92,4 +92,22 @@ void Grafo::adicionarAresta(No* no1, No* no2)
 
 void Grafo::removerAresta(No* no1, No* no2)
 {
+    No* aux = _listaAdj[no1->_pos];
+    No* noAtual = aux->_prox;
+
+    while (noAtual)
+    {
+        if (noAtual->_id==no2->_id) break;
+
+        aux = noAtual;
+        noAtual = noAtual->_prox;
+    }
+
+    if (noAtual)
+    {
+        aux = noAtual->_prox;
+        noAtual->_prox = nullptr;
+
+        delete noAtual;
+    }
 }
