@@ -20,9 +20,12 @@ public:
     Grafo(bool direcionado, std::string& modo);
     ~Grafo();
     void mudarModo(std::string& modo);
+    int getNumVertices() const;
     No* adicionarVertice(int id, int tipo);
     void adicionarAresta(No* no1, No* no2);
     void removerAresta(No* no1, No* no2);
+    int buscarSucessores(No* no, int* suc);
+    int buscarAntecessores(No* no, int* suc);
 };
 
 #endif //TP2_GRAFO_H

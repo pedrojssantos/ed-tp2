@@ -48,6 +48,11 @@ void Grafo::mudarModo(std::string& modo)
     _modo = modo;
 }
 
+int Grafo::getNumVertices() const
+{
+    return _numVertices;
+}
+
 No* Grafo::adicionarVertice(int id, int tipo) {
     if (_idxAtual==_numVertices)
     {
@@ -110,4 +115,48 @@ void Grafo::removerAresta(No* no1, No* no2)
 
         delete noAtual;
     }
+}
+
+int Grafo::buscarSucessores(No* no, int* suc)
+{
+    int cont=0;
+    No* noAtual = _listaAdj[no->_pos]->_prox;
+
+    while (noAtual)
+    {
+        suc[cont] = noAtual->_id;
+
+        ++cont;
+        noAtual = noAtual->_prox;
+    }
+
+    return cont;
+}
+
+int Grafo::buscarAntecessores(No* no, int* suc)
+{
+    int cont=0;
+
+    for (int i=0; i<_numVertices; ++i)
+    {
+        No* aux = _listaAdj[i];
+
+        if (!aux) continue;
+
+        No* noAtual = aux->_prox;
+
+        while (noAtual)
+        {
+            if (no->_id==noAtual->_id)
+            {
+                suc[cont] = aux->_id;
+                ++cont;
+                break;
+            }
+
+            noAtual = noAtual->_prox;
+        }
+    }
+
+    return cont;
 }
